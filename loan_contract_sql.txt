@@ -1,0 +1,68 @@
+/*1. LOAN_CONTRACT: Insert the following information into the loan contract table.
+
+   ACT_DATE       : 01-JAN-2020
+   CONTRACT_ID    : LD999999
+   CUSTOMER_NAME  : Kamran
+   CURRENCY_ID    : 944
+   FILIAL_CODE    : 103
+   AMOUNT_AZN     : 15000
+   INTEREST_RATE  : 18
+   LOAN_SECTOR    : ISTEHLAK
+*/
+
+  insert into LOAN_CONTRACT   (ACT_DATE, CONTRACT_ID ,CUSTOMER_NAME, CURRENCY_ID,FILIAL_CODE,AMOUNT_AZN ,INTEREST_RATE,
+   LOAN_SECTOR ) values ('1-JAN-2020','LD999999','Kamran' ,944,103,15000,18,'ISTEHLAK' )
+
+-- 2. Update the interest rate from 25% to 23% for loans in the BIZNES sector.
+   update LOAN_CONTRACT set INTEREST_RATE='23' where LOAN_SECTOR='BIZNES' and INTEREST_RATE='25';
+   select * from LOAN_CONTRACT
+
+-- 3. Increase the interest rate by 2 percentage points for all loans with an amount greater than 50,000 AZN.
+UPDATE LOAN_CONTRACT 
+SET INTEREST_RATE=INTEREST_RATE+2 
+where AMOUNT_AZN > 50000
+
+-- 4. Delete all loan contracts issued in June 2019.
+SELECT * from LOAN_CONTRACT 
+ WHERE ACT_DATE BETWEEN TO_DATE('2019-06-01','yyyy.mm.dd') 
+and TO_DATE('2019-07-01','yyyy.mm.dd')
+
+delete LOAN_CONTRACT where ACT_DATE BETWEEN TO_DATE('2019-06-01','yyyy.mm.dd') and TO_DATE('2019-07-01','yyyy.mm.dd') 
+
+-- 5. Delete all loans with an amount less than 5,000 AZN.
+select * from LOAN_CONTRACT where AMOUNT_AZN < 5000
+delete LOAN_CONTRACT where AMOUNT_AZN < 5000
+
+-- 6. Change the sector to KOB for all loans with branch code 101.
+ select * from LOAN_CONTRACT where FILIAL_CODE=101
+ update LOAN_CONTRACT set LOAN_SECTOR='KOB' where  FILIAL_CODE=101
+
+/*
+7. Create a sequence with the following properties:
+
+   Sequence Name : SEQ_LOAN
+   START WITH    : 1000
+   INCREMENT BY  : 1
+
+   Then, add a new column named LOAN_KEY to the LOAN_CONTRACT table
+   and populate it using the sequence.
+*/
+
+
+create sequence seq_loan
+start with 1000
+increment by 1
+alter table LOAN_CONTRACT add loan_key number;
+insert into LOAN_CONTRACT (loan_key) values (seq_loan.nextval)
+select loan_key from LOAN_CONTRACT
+
+/*
+8. Add the following column to the LOAN_CONTRACT table:
+
+   LOAN_STATUS VARCHAR2(20)
+
+   Then, set LOAN_STATUS to 'ACTIVE' for all existing rows.
+*/
+
+   alter table LOAN_CONTRACT add loan_status varchar2(20);
+   update loan_contract set loan_status='Active' where loan_status is Null
